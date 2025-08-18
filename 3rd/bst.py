@@ -1,6 +1,5 @@
-from typing import Optional, List, Iterator, Tuple, Any, Callable
+from typing import Optional, List, Iterator, Tuple, Any
 from dataclasses import dataclass
-import sys
 
 @dataclass
 class TreeStatistics:
@@ -132,7 +131,7 @@ class AVLTree:
         t2 = x.right
         
         # Perform rotation
-        x.right = y
+        x.right = y # type: ignore
         y.left = t2
         
         # Update heights
@@ -140,7 +139,7 @@ class AVLTree:
         self._update_height(x)
         
         self._rotation_count += 1
-        return x
+        return x # type: ignore
     
     def _rotate_left(self, x: AVLNode) -> AVLNode:
         """
@@ -155,7 +154,7 @@ class AVLTree:
         t2 = y.left
 
         # Perform rotation
-        y.left = x
+        y.left = x # type: ignore
         x.right = t2
 
         # Update heights
@@ -544,12 +543,12 @@ class AVLTree:
             
             if node.left is not None or node.right is not None:
                 if node.left:
-                    self.print_tree(node.left, level + 1, "L--- ")
+                    self.print_tree_fallback(node.left, level + 1, "L--- ")
                 else:
                     print(" " * ((level + 1) * 4) + "L--- None")
                 
                 if node.right:
-                    self.print_tree(node.right, level + 1, "R--- ")
+                    self.print_tree_fallback(node.right, level + 1, "R--- ")
                 else:
                     print(" " * ((level + 1) * 4) + "R--- None")
     
@@ -660,16 +659,19 @@ def demo_range_query() -> None:
     print(f"Pre-order:   {list(tree.preorder_traversal())}")
     print(f"Post-order:  {list(tree.postorder_traversal())}")
 
-    try:
-        while True:
-            print("\nPress Ctrl+C to exit.")
-            search_int = int(input("Enter an integer to search in the tree: "))
-            if tree.search(search_int):
-                print(f"{search_int} is present in the tree.")
-            else:
-                print(f"{search_int} is not present in the tree.")
-    except KeyboardInterrupt:
-        print("\nExiting search loop.")
+    # Deleting nodes
+
+    del_int = 49
+    print(f"\nDeleting value: {del_int}")
+    if tree.delete(del_int):
+        print(f"Successfully deleted {del_int}")
+        # Tree statistics after deletion
+        stats = tree.get_statistics()
+        print(f"Tree Statistics after deletion:")
+        print(f"  Size: {stats.size}")
+        print(f"  Height: {stats.height}")
+        print(f"  Root Balance Factor: {stats.balance_factor}")
+        tree.print_tree()
 
 if __name__ == "__main__":
     demo_range_query()
