@@ -208,7 +208,7 @@ class StatusStructure:
             
             if min_x <= self.current_x <= max_x: # type: ignore
                 try:
-                    y = seg.y_at_x(self.current_x) # type: ignore
+                    y = seg.y_at_x(sel`f.current_x) # type: ignore
                     return (y, seg.is_horizontal(), seg.id)
                 except (ValueError, ZeroDivisionError):
                     pass
